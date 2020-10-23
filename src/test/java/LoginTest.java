@@ -1,6 +1,7 @@
 import io.qameta.allure.Epic;
 import io.qameta.allure.Feature;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import ru.mosshina.pages.AuthPage;
 import ru.mosshina.pages.LkPage;
@@ -14,7 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class LoginTest extends WebDriver {
     String mail = "mail@mail.ru";
     String password = "password";
-    String badPassword = "badPassword";
     AuthPage authPage;
 
     @BeforeMethod
@@ -28,8 +28,14 @@ public class LoginTest extends WebDriver {
         assertThat(lkPage.getPersonalInfo()).contains(mail, "Город: Ivanovo");
     }
 
-    @Test(description = "проверка входа с неправельным паролем")
-    public void testBadLogin() {
+    @DataProvider(name = "passwordDataProvider")
+    public Object [] getData() {
+        Object[] data = {"passw","pass123", "P@asd"};
+        return data;
+    }
+
+    @Test(description = "проверка входа с неправельным паролем", dataProvider = "passwordDataProvider")
+    public void testBadLogin(String badPassword) {
         AuthPage authPageWithError = authPage.badLoginTest(mail, badPassword);
         authPageWithError.errorMsg.shouldHave(text("Пароль введен не верно"));
     }

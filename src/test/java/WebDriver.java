@@ -14,8 +14,9 @@ public class WebDriver {
         Configuration.baseUrl = Endpoints.baseUrl;
         open(Endpoints.baseUrl);
     }
+
     @AfterMethod
-    public void tearDown(){
+    public void tearDown() {
         WebDriverRunner.closeWebDriver();
     }
 }
